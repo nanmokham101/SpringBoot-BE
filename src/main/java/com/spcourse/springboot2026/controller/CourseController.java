@@ -4,6 +4,7 @@ import com.spcourse.springboot2026.dto.CourseDTO;
 import com.spcourse.springboot2026.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,11 +16,13 @@ public class CourseController {
     private CourseService courseService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'HEADMASTER')")
     public ResponseEntity<CourseDTO> create(@RequestBody CourseDTO dto) {
         return ResponseEntity.ok(courseService.create(dto));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'HEADMASTER')")
     public ResponseEntity<CourseDTO> update(
             @PathVariable Long id,
             @RequestBody CourseDTO dto) {
@@ -27,11 +30,19 @@ public class CourseController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'HEADMASTER')")
     public ResponseEntity<List<CourseDTO>> list() {
         return ResponseEntity.ok(courseService.getList());
     }
 
+    @GetMapping("/teacher/{teacherId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'HEADMASTER', 'LECTURER')")
+    public ResponseEntity<List<CourseDTO>> getCoursesByTeacher(@PathVariable Long teacherId) {
+        return ResponseEntity.ok(courseService.getCourseListByTeacherId(teacherId));
+    }
+
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'HEADMASTER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         courseService.delete(id);
         return ResponseEntity.noContent().build();

@@ -46,7 +46,11 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setEmail(dto.getEmail());
         teacher.setPhoneNumber(dto.getPhoneNumber());
         teacher.setAddress(dto.getAddress());
-        teacher.setRole(dto.getRole());
+        
+        // Only update role if it's provided in the request
+        if (dto.getRole() != null) {
+            teacher.setRole(dto.getRole());
+        }
 
         teacher.setUpdatedDate(LocalDateTime.now());
         teacher.setUpdatedBy(SecurityUtil.getCurrentUsername());

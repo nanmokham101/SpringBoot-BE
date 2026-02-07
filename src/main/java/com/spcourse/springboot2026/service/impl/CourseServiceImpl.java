@@ -2,6 +2,7 @@ package com.spcourse.springboot2026.service.impl;
 
 import com.spcourse.springboot2026.config.SecurityUtil;
 import com.spcourse.springboot2026.dto.CourseDTO;
+import com.spcourse.springboot2026.dto.TeacherDTO;
 import com.spcourse.springboot2026.entity.Course;
 import com.spcourse.springboot2026.entity.Status;
 import com.spcourse.springboot2026.entity.Teacher;
@@ -72,6 +73,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<CourseDTO> getCourseListByTeacherId(Long teacherId) {
+        return courseRepository.findByAssignedTeacherId(teacherId)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    @Override
     public void delete(Long id) {
         Optional<Course> courseOptional = courseRepository.findById(id);
         Course course = courseOptional.get();
@@ -87,7 +96,7 @@ public class CourseServiceImpl implements CourseService {
 
         if (course.getAssignedTeacher() != null) {
             dto.setTeacherId(course.getAssignedTeacher().getId());
-            dto.setTeacherName(course.getAssignedTeacher().getName());
+            dto.setTeacher(mapTeacherToDTO(course.getAssignedTeacher()));
         }
 
         dto.setStatus(course.getStatus());
@@ -96,6 +105,22 @@ public class CourseServiceImpl implements CourseService {
         dto.setUpdatedDate(course.getUpdatedDate());
         dto.setUpdatedBy(course.getUpdatedBy());
 
+        return dto;
+    }
+    
+    private TeacherDTO mapTeacherToDTO(Teacher teacher) {
+        TeacherDTO dto = new TeacherDTO();
+        dto.setId(teacher.getId());
+        dto.setName(teacher.getName());
+        dto.setEmail(teacher.getEmail());
+        dto.setPhoneNumber(teacher.getPhoneNumber());
+        dto.setAddress(teacher.getAddress());
+        dto.setRole(teacher.getRole());
+        dto.setStatus(teacher.getStatus());
+        dto.setCreatedDate(teacher.getCreatedDate());
+        dto.setCreatedBy(teacher.getCreatedBy());
+        dto.setUpdatedDate(teacher.getUpdatedDate());
+        dto.setUpdatedBy(teacher.getUpdatedBy());
         return dto;
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "school_users")
+@Table(name = "student")
 public class Student extends BaseAuditable{
 
     @Id

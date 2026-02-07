@@ -1,10 +1,13 @@
 package com.spcourse.springboot2026.service.impl;
 
 import com.spcourse.springboot2026.config.SecurityUtil;
+import com.spcourse.springboot2026.dto.CourseDTO;
 import com.spcourse.springboot2026.dto.StudentDTO;
+import com.spcourse.springboot2026.dto.TeacherDTO;
 import com.spcourse.springboot2026.entity.Course;
 import com.spcourse.springboot2026.entity.Status;
 import com.spcourse.springboot2026.entity.Student;
+import com.spcourse.springboot2026.entity.Teacher;
 import com.spcourse.springboot2026.repository.CourseRepository;
 import com.spcourse.springboot2026.repository.StudentRepository;
 import com.spcourse.springboot2026.service.StudentService;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -100,15 +104,59 @@ public class StudentServiceImpl implements StudentService {
         dto.setUpdatedDate(student.getUpdatedDate());
         dto.setUpdatedBy(student.getUpdatedBy());
 
-        if (student.getCourses() != null) {
+        if (student.getCourses() != null && !student.getCourses().isEmpty()) {
+            // Set course ID list
             dto.setCourseIdList(
                     student.getCourses()
                             .stream()
                             .map(Course::getId)
                             .toList()
             );
+            
+            // Set full course info with teacher
+            dto.setCourses(
+                    student.getCourses()
+                            .stream()
+                            .map(this::mapCourseToDTO)
+                            .collect(Collectors.toList())
+            );
         }
 
+        return dto;
+    }
+    
+    private CourseDTO mapCourseToDTO(Course course) {
+        CourseDTO dto = new CourseDTO();
+        dto.setId(course.getId());
+        dto.setCourseName(course.getCourseName());
+        
+        if (course.getAssignedTeacher() != null) {
+            dto.setTeacherId(course.getAssignedTeacher().getId());
+            dto.setTeacher(mapTeacherToDTO(course.getAssignedTeacher()));
+        }
+        
+        dto.setStatus(course.getStatus());
+        dto.setCreatedDate(course.getCreatedDate());
+        dto.setCreatedBy(course.getCreatedBy());
+        dto.setUpdatedDate(course.getUpdatedDate());
+        dto.setUpdatedBy(course.getUpdatedBy());
+        
+        return dto;
+    }
+    
+    private TeacherDTO mapTeacherToDTO(Teacher teacher) {
+        TeacherDTO dto = new TeacherDTO();
+        dto.setId(teacher.getId());
+        dto.setName(teacher.getName());
+        dto.setEmail(teacher.getEmail());
+        dto.setPhoneNumber(teacher.getPhoneNumber());
+        dto.setAddress(teacher.getAddress());
+        dto.setRole(teacher.getRole());
+        dto.setStatus(teacher.getStatus());
+        dto.setCreatedDate(teacher.getCreatedDate());
+        dto.setCreatedBy(teacher.getCreatedBy());
+        dto.setUpdatedDate(teacher.getUpdatedDate());
+        dto.setUpdatedBy(teacher.getUpdatedBy());
         return dto;
     }
 

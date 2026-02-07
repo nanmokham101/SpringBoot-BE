@@ -16,4 +16,5 @@ public class StudentDTO extends BaseAuditableDTO {
     private String address;
 
     private List<Long> courseIdList;
+    private List<CourseDTO> courses;
 }

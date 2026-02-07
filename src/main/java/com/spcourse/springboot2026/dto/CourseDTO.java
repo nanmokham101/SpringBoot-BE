@@ -10,5 +10,5 @@ public class CourseDTO extends BaseAuditableDTO {
 
     // assigned teacher
     private Long teacherId;
-    private String teacherName;
+    private TeacherDTO teacher;
 }
