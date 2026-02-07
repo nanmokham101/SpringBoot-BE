@@ -35,12 +35,6 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getList());
     }
 
-    @GetMapping("/teacher/{teacherId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HEADMASTER', 'LECTURER')")
-    public ResponseEntity<List<CourseDTO>> getCoursesByTeacher(@PathVariable Long teacherId) {
-        return ResponseEntity.ok(courseService.getCourseListByTeacherId(teacherId));
-    }
-
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'HEADMASTER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

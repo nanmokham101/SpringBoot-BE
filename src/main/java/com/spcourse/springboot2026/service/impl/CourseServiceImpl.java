@@ -73,14 +73,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseDTO> getCourseListByTeacherId(Long teacherId) {
-        return courseRepository.findByAssignedTeacherId(teacherId)
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
-    }
-
-    @Override
     public void delete(Long id) {
         Optional<Course> courseOptional = courseRepository.findById(id);
         Course course = courseOptional.get();

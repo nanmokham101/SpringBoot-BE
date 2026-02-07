@@ -8,6 +8,5 @@ public interface CourseService {
     CourseDTO create(CourseDTO dto);
     CourseDTO update(Long id, CourseDTO dto);
     List<CourseDTO> getList();
-    List<CourseDTO> getCourseListByTeacherId(Long teacherId);
     void delete(Long id);
 }
